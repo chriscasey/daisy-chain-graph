@@ -230,16 +230,16 @@ function drawBlameGraph() {
     .attr("class", "node")
     .attr("r", function(d) { return nodeSize(d.value); })
     .style("fill", function(d) { return color(d.psi); })
-    .text(function(d) { return d.name; })
+    // .text(function(d) { return d.name; })
     .call(force.drag);
 
   node.append("svg:title")
     .text(function(d) { return title(d); });
 
-  node.append("svg:text")
+  node.append("text")
     .attr("dx", 12)
     .attr("dy", ".35em")
-    .text(function(d) { console.log(d.name); return d.name; });   
+    .text(function(d) { return d.name; });   
 
   force.on("tick", function(e) {
 
@@ -265,7 +265,7 @@ function linkWidth(value) {
 }
 
 function title(node) {
-  return "Id: " + node.index + "\nName: " + node.name + "\nValue: " + node.value + " \nDepth: " + node.depth + "\nWeight: " + node.weight;
+  return "Name: " + node.name + "\nValue: " + node.value + " \nDepth: " + node.depth + "\nWeight: " + node.weight;
 }
 
 
