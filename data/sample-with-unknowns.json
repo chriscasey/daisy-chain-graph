@@ -394,7 +394,7 @@
         {"name": "PieLayout", "psi": 0, "size": 2728},
         {"name": "RadialTreeLayout", "psi": 1, "size": 12348},
         {
-          "name": "RandomLayout", 
+          "name": "Random", 
           "psi": 1, 
           "size": 870,
           "children": [
