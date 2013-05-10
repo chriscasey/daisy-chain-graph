@@ -146,7 +146,7 @@ function title(node) {
 //Start of blame graph
 var blamegraph = { "nodes":[], "links":[] };
 var blamegraphwidth = 800,
-    blamegraphheight = 200,
+    blamegraphheight = 150,
     blamegraphpadding = 100,
     blamegraphrisklist = ["low", "medium", "high"];      
 
@@ -269,13 +269,13 @@ function title(node) {
 //Start of node details
 function displayNodeDetails(d) {  
   $("#node-details").empty();
-  $("#node-details").append('<h3>Node details:</h3>');
-  $("#node-details").append('<p>Name: ' + d.name + '</p>');
-  $("#node-details").append('<p>PSI: ' + d.psi + '</p>');
-  $("#node-details").append('<p>Size: ' + d.value + '</p>');
-  $("#node-details").append('<p>Depth: ' + d.depth + '</p>');
-  $("#node-details").append('<p>Number of children: ' + d.children.length + '</p>');
-  $("#node-details").append('<p>Parent: ' + d.parent.name + '</p>');
+  $("#node-details").append('<h4>' + d.name + '</h4>');
+  $("#node-details").append('<hr>');
+  $("#node-details").append('<p><b>PSI:</b> ' + d.psi + '</p>');
+  $("#node-details").append('<p><b>Size:</b> ' + d.value + '</p>');
+  $("#node-details").append('<p><b>Depth:</b> ' + d.depth + '</p>');
+  $("#node-details").append('<p><b>Number of children:</b> ' + d.children.length + '</p>');
+  $("#node-details").append('<p><b>Parent:</b> ' + d.parent.name + '</p>');
 }
 
 

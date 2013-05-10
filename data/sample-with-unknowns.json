@@ -268,7 +268,7 @@
      "psi": 3, 
      "children": [
       {"name": "Axes", "psi": 2, "size": 1302},
-      {"name": "Axis", "psi": 3, "size": 24593},
+      {"name": "Axis", "psi": 1, "size": 24593},
       {"name": "AxisGridLine", "psi": 0, "size": 652},
       {"name": "AxisLabel", "psi": 0, "size": 636},
       {"name": "CartesianAxes", "psi": 0, "size": 6703}
@@ -419,7 +419,7 @@
       {"name": "SortOperator", "psi": 0, "size": 2023}
      ]
     },
-    {"name": "Visualization", "psi": 0, "size": 16540}
+    {"name": "Visualization", "psi": 3, "size": 16540}
    ]
   }
  ]
