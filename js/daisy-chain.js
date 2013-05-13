@@ -1,26 +1,6 @@
 
 //Sunburst Graph
 var colorscheme = {
-        BuGn: {
-          3: ["#e5f5f9","#99d8c9","#2ca25f"],
-          4: ["#edf8fb","#b2e2e2","#66c2a4","#238b45"],
-          5: ["#edf8fb","#b2e2e2","#66c2a4","#2ca25f","#006d2c"],
-          6: ["#edf8fb","#ccece6","#99d8c9","#66c2a4","#2ca25f","#006d2c"],
-          7: ["#edf8fb","#ccece6","#99d8c9","#66c2a4","#41ae76","#238b45","#005824"],
-          8: ["#f7fcfd","#e5f5f9","#ccece6","#99d8c9","#66c2a4","#41ae76","#238b45","#005824"],
-          9: ["#f7fcfd","#e5f5f9","#ccece6","#99d8c9","#66c2a4","#41ae76","#238b45","#006d2c","#00441b"]
-        },
-        heat: {
-          3: ['#91cf60', '#ffffbf', '#fc8d59'],
-          4: ['#1a9641', '#a6d96a', '#fdae61', '#d7191c'],
-          5: ['#1a9850', '#91cf60', '#d9ef8b', '#fee08b', '#fc8d59', '#d73027'],
-          6: ['#1a9850', '#91cf60', '#d9ef8b', '#fee08b', '#fc8d59', '#d73027'],
-          7: ['#1a9850', '#91cf60', '#d9ef8b', '#ffffbf', '#fee08b', '#fc8d59', '#d73027'],
-          8: ['#1a9850', '#66bd63', '#a6d96a', '#d9ef8b', '#fee08b', '#fdae61', '#f46d43', '#d73027'],
-          9: ['#1a9850', '#66bd63', '#a6d96a', '#d9ef8b', '#ffffbf', '#fee08b', '#fdae61', '#f46d43', '#d73027'],
-          10: ['#006837', '#1a9850', '#66bd63', '#a6d96a', '#d9ef8b', '#fee08b', '#fdae61', '#f46d43', '#d73027', '#a50026'],
-          11: ['#006837', '#1a9850', '#66bd63', '#a6d96a', '#d9ef8b', '#ffffbf', '#fee08b', '#fdae61', '#f46d43', '#d73027', '#a50026']
-        },
         psi: {
           3: ['#91cf60', '#FFF500', '#FF0000'],
           4: ['#91cf60', '#FFF500', '#FF0000', '#BDBDBD']
@@ -57,7 +37,7 @@ var color = d3.scale.ordinal()
   .range(colorscheme.psi[4]);    
 
 
-d3.json("/data/sample-with-unknowns.json", function(error, root) {
+d3.json("/data/sample-tree.json", function(error, root) {
 
   var arcs = svg.datum(root).selectAll("path")
     .data(partition.nodes)
@@ -148,30 +128,80 @@ var blamegraph = { "nodes":[], "links":[] };
 var blamegraphwidth = 800,
     blamegraphheight = 150,
     blamegraphpadding = 100,
-    blamegraphrisklist = ["low", "medium", "high"];      
+    blamegraphrisklist = ["low", "medium", "high"];
+
+var blamedict = new Array();
+d3.json("/data/sample-dict.json", function(error, root) {
+  blamedict = root; 
+});
+          
 
 function buildBlameGraph(node) {
-  
+
   $("#node-details").empty();
-  blamegraph = { "nodes":[], "links":[] };
-  blamegraph.nodes.push(node);
-  while (node.depth > 0)
-  {
-    link = {"source": node.parent, "target": node, "value": node.size, "depth": node.depth, "risk": "low"};
-    blamegraph.links.push(link);
+  $("#blame-graph").empty();
+  displayNodeDetails(node);
 
-    node = node.parent;
-    blamegraph.nodes.push(node);
+  if (node.name in blamedict)
+    {
+      var chains = blamedict[node.name];
+      for (var i = 0; i < chains.length; i++) {
+        buildNodesAndLinks(chains[i]);
+      }
+    }
+  else 
+    {
+      blamegraph = { "nodes":[], "links":[] };
+      blamegraph.nodes.push(node);
+      while (node.depth > 0)
+      {
+        link = {"source": node.parent, "target": node, "value": node.size, "depth": node.depth, "risk": "low"};
+        blamegraph.links.push(link);
 
-  }
-  removeExistingGraph();
-  drawBlameGraph();
+        node = node.parent;
+        blamegraph.nodes.push(node);
+
+      }
+      drawBlameGraph();      
+    }  
+
+  // for (var i = 0; i < chains.length; i++)
+  // {
+  //   console.log(chains[i]);
+  // }
+
+  // blamegraph = { "nodes":[], "links":[] };
+  // blamegraph.nodes.push(node);
+  // while (node.depth > 0)
+  // {
+  //   link = {"source": node.parent, "target": node, "value": node.size, "depth": node.depth, "risk": "low"};
+  //   blamegraph.links.push(link);
+
+  //   node = node.parent;
+  //   blamegraph.nodes.push(node);
+
+  // }
+  // drawBlameGraph();
   
 }
 
-function removeExistingGraph() {
-  graph = d3.select("#blame-graph.svg");
-  d3.select("#svg").remove();
+function buildNodesAndLinks(chain) {
+  blamegraph = { "nodes":[], "links":[] };
+  for (var i = 0; i < chain.length; i++) {
+      
+    var node = chain[i];
+    node['depth'] = i;
+    console.log(node);
+    blamegraph.nodes.push(node);
+
+    if (node.parent) {
+      link = {"source": node.parent, "target": node, "value": node.size, "depth": node.depth, "risk": "low"};
+      blamegraph.links.push(link);      
+    }
+
+  }
+  console.log(blamegraph);
+  drawBlameGraph();
 }
 
 function drawBlameGraph() {
@@ -274,7 +304,9 @@ function displayNodeDetails(d) {
   $("#node-details").append('<p><b>PSI:</b> ' + d.psi + '</p>');
   $("#node-details").append('<p><b>Size:</b> ' + d.value + '</p>');
   $("#node-details").append('<p><b>Depth:</b> ' + d.depth + '</p>');
-  $("#node-details").append('<p><b>Number of children:</b> ' + d.children.length + '</p>');
+  if (d.children) {
+    $("#node-details").append('<p><b>Number of children:</b> ' + d.children.length + '</p>');  
+  }
   $("#node-details").append('<p><b>Parent:</b> ' + d.parent.name + '</p>');
 }
 

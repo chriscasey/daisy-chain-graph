@@ -23,7 +23,7 @@
       {"name": "BetweennessCentrality", "psi": 1, "size": 3534},
       {"name": "LinkDistance", "psi": 2, "size": 5731},
       {"name": "MaxFlowMinCut", "psi": 0, "size": 7840},
-      {"name": "ShortestPaths", "psi": 2, "size": 5914},
+      {"name": "deep", "psi": 3, "size": 933},
       {"name": "SpanningTree", "psi": 1, "size": 3416}
      ]
     },
@@ -135,7 +135,7 @@
     {"name": "CompositeExpression", "psi": 0, "size": 3677},
     {"name": "Count", "psi": 1, "size": 781},
     {"name": "DateUtil", "psi": 1, "size": 4141},
-    {"name": "Distinct", "psi": 2, "size": 933},
+    {"name": "deep", "psi": 3, "size": 933},
     {"name": "Expression", "psi": 2, "size": 5130},
     {"name": "ExpressionIterator", "psi": 3, "size": 3617},
     {"name": "Fn", "psi": 1, "size": 3240},
@@ -267,7 +267,7 @@
      "name": "axis",
      "psi": 3, 
      "children": [
-      {"name": "Axes", "psi": 2, "size": 1302},
+      {"name": "deep", "psi": 2, "size": 1234},
       {"name": "Axis", "psi": 1, "size": 24593},
       {"name": "AxisGridLine", "psi": 0, "size": 652},
       {"name": "AxisLabel", "psi": 0, "size": 636},

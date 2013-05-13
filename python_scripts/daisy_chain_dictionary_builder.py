@@ -1,5 +1,7 @@
 import json
+import jsonpickle
 from optparse import OptionParser
+import os
 
 
 """Node object
@@ -11,7 +13,7 @@ class Node(json.JSONEncoder):
         self.name = name
         self.psi = psi
         self.children = children
-        self.parent = parent
+        self.parent = parent        
 
 result = {}
 rootname = None
@@ -25,7 +27,7 @@ def buildDict(root, parent):
 			buildDict(child, node)
 	else:
 		node = Node(root['name'], root['psi'], [], parent)
-		rootname = root['name']
+		trackername = root['name']
 		chain = []
 		chain.append(node)
 		while node.parent != None:
@@ -33,11 +35,25 @@ def buildDict(root, parent):
 			chain.append(node)
 
 		chain.reverse()
-		if rootname in result.keys():
-			result[rootname].append(chain)
+			
+		if trackername in result.keys():
+			result[trackername].append(chain)
 		else:
-			result[rootname] = chain		
+			result[trackername] = []
+			result[trackername].append(chain)		
 
+
+class NodeEncoder(json.JSONEncoder):
+	def _iterencode(self, o, markers=None):
+		if isinstance(o, Node):
+			print "node instance"
+			return {'name': o.name, 'psi': o.psi, 'children': len(o.children), 'parent': o.parent}
+
+	def default(self, o, markers=None):
+		if isinstance(o, Node):
+			node = {'name': o.name, 'psi': o.psi, 'children': len(o.children), 'parent': o.parent}
+			print node
+			return node		
 
 if __name__ == "__main__":
 
@@ -49,8 +65,11 @@ if __name__ == "__main__":
 	json_data = open(file)
 	data = json.load(json_data)
 	buildDict(data, None)
-	
-	deepnode = result['deep']
-	for node in deepnode:
-		print node.name
+
+	pickled = json.dumps(result, cls=NodeEncoder)
+	# pickled = jsonpickle.encode(result)
+	f = open('../data/sample-dict.json', 'w')
+	f.write(pickled)
+	f.close()
+	# print pickled
 
