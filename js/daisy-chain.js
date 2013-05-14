@@ -142,15 +142,14 @@ function buildBlameGraph(node) {
   $("#blame-graph").empty();
   displayNodeDetails(node);
 
-  if (node.name in blamedict)
-    {
+  if (node.name in blamedict) {
       var chains = blamedict[node.name];
       for (var i = 0; i < chains.length; i++) {
         buildNodesAndLinks(chains[i]);
+        drawBlameGraph(); 
       }
-    }
-  else 
-    {
+  }
+  else {
       blamegraph = { "nodes":[], "links":[] };
       blamegraph.nodes.push(node);
       while (node.depth > 0)
@@ -160,48 +159,32 @@ function buildBlameGraph(node) {
 
         node = node.parent;
         blamegraph.nodes.push(node);
+        
+      } 
+      drawBlameGraph();       
+  }
 
-      }
-      drawBlameGraph();      
-    }  
-
-  // for (var i = 0; i < chains.length; i++)
-  // {
-  //   console.log(chains[i]);
-  // }
-
-  // blamegraph = { "nodes":[], "links":[] };
-  // blamegraph.nodes.push(node);
-  // while (node.depth > 0)
-  // {
-  //   link = {"source": node.parent, "target": node, "value": node.size, "depth": node.depth, "risk": "low"};
-  //   blamegraph.links.push(link);
-
-  //   node = node.parent;
-  //   blamegraph.nodes.push(node);
-
-  // }
-  // drawBlameGraph();
-  
 }
 
 function buildNodesAndLinks(chain) {
   blamegraph = { "nodes":[], "links":[] };
   for (var i = 0; i < chain.length; i++) {
-      
+
     var node = chain[i];
     node['depth'] = i;
-    console.log(node);
+    node['weight'] = i;
     blamegraph.nodes.push(node);
 
-    if (node.parent) {
-      link = {"source": node.parent, "target": node, "value": node.size, "depth": node.depth, "risk": "low"};
-      blamegraph.links.push(link);      
+    var child = chain[i+1];
+    if (child) {
+      child['depth'] = i + 1;
+      child['weight'] = i + 1;
+      link = {"source": node, "target": child, "value": 1, "depth": node.depth, "risk": "low"};
+      blamegraph.links.push(link); 
     }
-
+  
   }
-  console.log(blamegraph);
-  drawBlameGraph();
+
 }
 
 function drawBlameGraph() {
@@ -248,7 +231,7 @@ function drawBlameGraph() {
     .enter().append("line")
     .attr("class", "link")
     .attr("marker-end", function(d) { return "url(#" + d.risk + ")"; })
-    .style("stroke-width", function(d) { return linkWidth(d.value); });
+    .style("stroke-width", function(d) { return linkWidth(); });
 
 
   var node = blamegraphsvg.selectAll(".node")
@@ -287,7 +270,7 @@ function nodeSize(value) {
   return 10;
 }
 
-function linkWidth(value) {
+function linkWidth() {
   return 2;
 }
 
@@ -307,7 +290,9 @@ function displayNodeDetails(d) {
   if (d.children) {
     $("#node-details").append('<p><b>Number of children:</b> ' + d.children.length + '</p>');  
   }
-  $("#node-details").append('<p><b>Parent:</b> ' + d.parent.name + '</p>');
+  if (d.parent.name) {
+    $("#node-details").append('<p><b>Parent:</b> ' + d.parent.name + '</p>');  
+  } 
 }
 
 

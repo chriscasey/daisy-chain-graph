@@ -13,7 +13,7 @@ class Node(json.JSONEncoder):
         self.name = name
         self.psi = psi
         self.children = children
-        self.parent = parent        
+        self.parent = parent    
 
 result = {}
 rootname = None
@@ -47,13 +47,11 @@ class NodeEncoder(json.JSONEncoder):
 	def _iterencode(self, o, markers=None):
 		if isinstance(o, Node):
 			print "node instance"
-			return {'name': o.name, 'psi': o.psi, 'children': len(o.children), 'parent': o.parent}
+			return {'name': o.name, 'psi': o.psi, 'children': o.children, 'parent': o.parent}
 
 	def default(self, o, markers=None):
 		if isinstance(o, Node):
-			node = {'name': o.name, 'psi': o.psi, 'children': len(o.children), 'parent': o.parent}
-			print node
-			return node		
+			return {'name': o.name, 'psi': o.psi, 'children': len(o.children), 'parent': o.parent}	
 
 if __name__ == "__main__":
 
