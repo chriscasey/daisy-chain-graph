@@ -1,0 +1,30 @@
+{
+	"tree": {
+		"name": "String",
+		"psi": "int",
+		"thirdParty": "boolean",
+		"authorized": "boolean",
+ 		"category": "int",
+ 		"children": [
+			{
+				"name": "String",
+				"psi": "int",
+				"thirdParty": "boolean",
+				"authorized": "boolean",
+		 		"category": "int",
+				"children": []
+ 			}
+ 		]		
+	},
+	"map": {
+		"name": "String",
+		"psi": "int",
+		"thirdParty": "boolean",
+		"authorized": "boolean",
+ 		"category": "int",
+		"chains" : [
+			[{}, {}, {}],
+			[{}, {}, {}]
+		]
+	}
+}

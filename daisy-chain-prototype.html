@@ -14,31 +14,52 @@
 
     </head>
     <body>
-      <div class="container border">
+      
+      <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+          <p class="brand">Filters:</p>
+<!--             <label class="radio inline"><input type="radio" name="mode" value="size" checked> Number of requests</label>
+            <label class="radio inline"><input type="radio" name="mode" value="count"> Unique domains</label> -->
+            <div class="btn-group" data-toggle="buttons-radio">
+              <button class="btn active" name="mode" value="size">Number of requests</button>
+              <button class="btn" name="mode" value="count">Unique domains</button>
+            </div>
+        </div>
+      </div>
+
+
+      <div class="row container border">
+
+      <div class="span9">
         
-        <div class="row">
+        <!-- radio button filters -->
+<!--         <div class="row">
           <div class="span12" class="tight-border">
             <h4>Filters:</h4>
             <label class="radio"><input type="radio" name="mode" value="size" checked> Number of requests</label>
             <label class="radio"><input type="radio" name="mode" value="count"> Unique domains</label>
           </div> 
-        </div>   
+        </div>    -->
 
         <div class="row">
-          <div class="span8">
+          <div class="span9">
             <div id="sunburst"></div>
             <script src="/js/daisy-chain.js"></script> 
-          </div>
-          <div class="span3">
-            <div id="node-details"></div>
-          </div>
         </div>
 
         <div class="row">
           <div id="blame-graph"></div>
         </div>
 
-      </div>
+      </div>      
+
+
+      </div> 
+
+      <div class="span2">
+            <div id="node-details"></div>
+      </div> 
+
 
 
 

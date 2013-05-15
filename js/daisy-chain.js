@@ -69,7 +69,34 @@ d3.json("/data/sample-tree.json", function(error, root) {
   //   .attr("style", function(d) { return d.depth ? null : "display: none"; }) // hide inner
   //   .text(function(d) { return d.name; });
 
-  d3.selectAll("input").on("change", function change() {
+  // transitions for input buttons
+  // d3.selectAll("input").on("change", function change() {
+  //   var value = this.value === "count"
+  //       ? function() { return 1; }
+  //       : function(d) { return d.size; };
+
+  //   path
+  //       .data(partition.value(value).nodes)
+  //     .transition()
+  //       .duration(1500)
+  //       .attrTween("d", arcTween);
+
+  //   label
+  //       .data(partition.value(value).nodes)
+  //     .transition()
+  //       .duration(1500)
+  //       .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; }); 
+
+  //   // text
+  //   //     .data(partition.value(value).nodes)
+  //   //   .transition()
+  //   //     .duration(1500)
+  //   //     .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; });     
+
+
+  // });
+
+  d3.selectAll("button").on("click", function change() {
     var value = this.value === "count"
         ? function() { return 1; }
         : function(d) { return d.size; };
@@ -93,7 +120,7 @@ d3.json("/data/sample-tree.json", function(error, root) {
     //     .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; });     
 
 
-  });
+  });  
 });
 
 
@@ -284,16 +311,38 @@ function displayNodeDetails(d) {
   $("#node-details").empty();
   $("#node-details").append('<h4>' + d.name + '</h4>');
   $("#node-details").append('<hr>');
-  $("#node-details").append('<p><b>PSI:</b> ' + d.psi + '</p>');
-  $("#node-details").append('<p><b>Size:</b> ' + d.value + '</p>');
+  $("#node-details").append('<p><b>PSI:</b> ' + (d.psi ? d.psi : 0) + '</p>');
+  $("#node-details").append('<p><b>Size:</b> ' + (d.value ? d.value : 0) + '</p>');
   $("#node-details").append('<p><b>Depth:</b> ' + d.depth + '</p>');
   if (d.children) {
-    $("#node-details").append('<p><b>Number of children:</b> ' + d.children.length + '</p>');  
+    $("#node-details").append('<p><b>Number of children:</b> ' + (d.children.length ? d.children.length : 0) + '</p>');  
   }
   if (d.parent.name) {
     $("#node-details").append('<p><b>Parent:</b> ' + d.parent.name + '</p>');  
   } 
 }
+
+//scrolling node details code
+// $(function() {
+
+//     var $sidebar   = $("#node-details"), 
+//         $window    = $(window),
+//         offset     = $sidebar.offset(),
+//         topPadding = 30;
+
+//     $window.scroll(function() {
+//         if ($window.scrollTop() > offset.top) {
+//             $sidebar.stop().animate({
+//                 marginTop: $window.scrollTop() - offset.top + topPadding
+//             });
+//         } else {
+//             $sidebar.stop().animate({
+//                 marginTop: 0
+//             });
+//         }
+//     });
+    
+// });
 
 
 
